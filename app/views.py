@@ -76,6 +76,27 @@ def display_topics(request):
         QLTO = Topic.objects.order_by(Length('topic_name').desc())#orders based on length in descending order 
         QLTO = Topic.objects.exclude(topic_name='Cricket')
 
+        QLTO = Topic.objects.all()
+
+        #LOOKups
+
+        #for pattern searching we go for startswith,endswith,contains --> its not case sensitive
+
+        QLTO = Topic.objects.filter(topic_name__startswith = 'a') # its like a pattern searching LIKE operator in sql
+        QLTO = Topic.objects.filter(topic_name__startswith = 'c')
+        QLTO = Topic.objects.filter(topic_name__startswith = 'h')
+        QLTO = Topic.objects.filter(topic_name__endswith = 'c')
+        QLTO = Topic.objects.filter(topic_name__endswith = 'ey')
+        QLTO = Topic.objects.filter(topic_name__endswith = 't')
+        QLTO = Topic.objects.filter(topic_name__contains = 'c')
+        QLTO = Topic.objects.filter(topic_name__contains = 'a')
+    #in lookup
+        QLTO = Topic.objects.filter(topic_name__in=('Chess','Cricket'))
+
+
+
+
+
         
         d = {'QLTO':QLTO}
 
@@ -95,6 +116,22 @@ def display_webpages(request):
     QLWO = Webpage.objects.exclude(topic_name='Cricket')
 
 
+#LOOKups
+
+    #for pattern searching we go for startswith,endswith,contains --> its not case sensitive
+
+    QLWO = Webpage.objects.filter(name__startswith = 'a') # its like a pattern searching LIKE operator in sql
+    QLWO = Webpage.objects.filter(name__startswith = 'r')
+    QLWO = Webpage.objects.filter(url__startswith = 'a')
+    QLWO = Webpage.objects.filter(url__endswith = 'in')
+    QLWO = Webpage.objects.filter(url__contains = 'a')
+    QLWO = Webpage.objects.filter(url__contains = 'o')
+    #QLWO = Webpage.objects.filter(topic_name__startswith ='h')
+    #QLWO=Webpage.objects.all()
+
+    #In lookup
+    QLWO = Webpage.objects.filter(name__in =('Dhoni','Virat'))
+
     d={'QLWO':QLWO}
     return render(request,'display_webpages.html',d)
 
@@ -109,6 +146,50 @@ def display_access(request):
     QLAO=AccessRecord.objects.filter(author='msd').order_by('id')
     #QLAO=AccessRecord.objects.filter(name='dhoni').order_by('name')
     QLAO = AccessRecord.objects.exclude(author='msd')
+
+
+#LOOKups
+
+    #for pattern searching we go for startswith,endswith,contains --> its not case sensitive
+
+    #QLAO = AccessRecord.objects.filter(name__startswith = 'a')-->it is foreign key column we can't use lookupd coz its object
+     # its like a pattern searching LIKE operator in sql
+    QLAO = AccessRecord.objects.filter(author__startswith = 'r')
+    QLAO = AccessRecord.objects.filter(author__endswith ='d')
+    QLAO = AccessRecord.objects.filter(author__contains ='d')
+    QLAO = AccessRecord.objects.all()
+    #__year lookup
+    QLAO = AccessRecord.objects.filter(date__year ='1999')
+
+    #__month lookup
+    QLAO = AccessRecord.objects.filter(date__month =9)
+    #__day lookup
+    QLAO = AccessRecord.objects.filter(date__day =17)
+
+    #IN lookup
+    QLAO = AccessRecord.objects.filter(author__in =('msd','virat'))
+
+    #__gt lookup(greater than > )
+    QLAO = AccessRecord.objects.filter(date__year__gt=1990)
+
+    #__lt lookup(lessthan <)
+    QLAO = AccessRecord.objects.filter(date__year__lt=1990)
+    #__gte lookup(greater thanequalsto >= )
+    QLAO = AccessRecord.objects.filter(date__year__gte=1990)
+    #__lte lookup(lessthan equal to <=)
+    QLAO = AccessRecord.objects.filter(date__year__lte=1990)
+
+    #Foreign Key columns
+    #QLAO = AccessRecord.objects.filter(name__startswith ='v')
+
     d={'QLAO':QLAO}
     return render(request,'display_access.html',d)
 
+
+
+
+#Lookups --> helps to fetch the data based on conditions precisely
+    #__startswith - > fetch the data which starts with given value
+    #__endswith - > fetch the data which ends with given value
+    #__contains - > fetch the data which contains (means if data have the value wherever) it returns
+    # ---> startswith,endswith,contains are case insensitive
